@@ -83,6 +83,30 @@ Download subtitles/transcripts from YouTube videos or entire playlists.
 ./nlm-transcript.sh "https://youtu.be/xxxxx" --lang en
 ```
 
+### 3-1. Meeting Minutes Generator (회의록 자동 생성)
+
+Turn a meeting recording (audio file from your Mac or iPhone) into a clean, structured Markdown meeting-minutes document. Uses **OpenAI Whisper** for accurate Korean speech-to-text and **Claude** for summarizing into agenda / decisions / action items.
+
+```bash
+# 기본: 오디오 파일 → 회의록 markdown
+export OPENAI_API_KEY=sk-...
+export ANTHROPIC_API_KEY=sk-ant-...
+./nlm-meeting-minutes.sh meeting.m4a
+
+# 제목·참석자 지정 + 받아쓰기 원문도 저장
+./nlm-meeting-minutes.sh meeting.m4a \
+    --title "2분기 마케팅 회의" \
+    --attendees "홍길동,김대리,이과장" \
+    --transcript meeting.transcript.txt
+
+# 회의록을 NotebookLM 노트북에 바로 추가
+./nlm-meeting-minutes.sh meeting.m4a --notebook <id>
+```
+
+긴 녹음은 자동으로 15분 단위로 분할 처리하므로 길이 제한이 없습니다 (ffmpeg 필요). 결과 회의록은 핵심 요약 · 주요 논의 · 결정 사항 · 액션 아이템(담당자/기한 표) 형식으로 정리됩니다.
+
+> 💡 **워크플로:** 회의 중 아이폰/맥북 음성 메모로 녹음 → 맥북으로 파일 전송 → 이 스크립트 실행. (애플워치를 녹음 시작/정지 리모컨으로 쓰는 watchOS 앱은 별도 단계로 추가 예정)
+
 ### 4. RSS/Atom Feed Import
 
 Parse RSS or Atom feeds and import articles into NotebookLM.
